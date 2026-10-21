@@ -1,0 +1,13 @@
+@model PaginaAcademica
+@{ViewData["Title"]="Detalle · "+Model.Titulo;var f=Model.Formulario;var r=AcademicoService.Obtener(Model.Datos,Model.Modulo,f.Id);}
+<a class="volver" href="/academico/@Model.Modulo">← Volver al listado</a><div class="encabezado"><div><p class="ceja">DETALLE DEL REGISTRO</p><h1>@Model.Etiqueta(r)</h1></div><a class="boton primario" href="/academico/@Model.Modulo/@f.Id/editar">Editar registro</a></div>
+<section class="panel"><dl class="detalle"><dt>Identificador interno</dt><dd>@f.Id</dd>
+@switch(r){case EstudianteRegistro e:<dt>Correo</dt><dd>@e.Email</dd><dt>Teléfono</dt><dd>@e.Telefono</dd><dt>Fecha de nacimiento</dt><dd>@e.FechaNacimiento.ToString("dd/MM/yyyy")</dd><dt>Carrera</dt><dd>@e.Carrera</dd><dt>Facultad</dt><dd>@e.Facultad</dd><dt>Ciclo / CUM registrado</dt><dd>@e.CicloActual / @e.CUM.ToString("F2")</dd>break;
+case DocenteRegistro d:<dt>Especialidad</dt><dd>@d.Especialidad</dd><dt>Correo</dt><dd>@d.Email</dd><dt>Teléfono</dt><dd>@d.Telefono</dd><dt>Fecha de nacimiento</dt><dd>@d.FechaNacimiento.ToString("dd/MM/yyyy")</dd>break;
+case CursoRegistro c:<dt>Docente</dt><dd>@Model.Etiqueta(Model.Datos.Docentes.Single(d=>d.Id==c.DocenteId))</dd><dt>Créditos</dt><dd>@c.Creditos</dd><dt>Inscritos / cupo</dt><dd>@Model.Datos.Matriculas.Count(m=>m.CursoId==c.Id && m.Activa) / @c.CupoMaximo</dd>break;
+case MatriculaRegistro m:<dt>Estudiante</dt><dd><a href="/academico/estudiantes/@m.EstudianteId">@Model.Etiqueta(Model.Datos.Estudiantes.Single(e=>e.Id==m.EstudianteId))</a></dd><dt>Curso</dt><dd><a href="/academico/cursos/@m.CursoId">@Model.Etiqueta(Model.Datos.Cursos.Single(c=>c.Id==m.CursoId))</a></dd><dt>Fecha (UTC)</dt><dd>@m.FechaMatricula.ToString("dd/MM/yyyy HH:mm")</dd><dt>Estado</dt><dd>@(m.Activa?"Activa":"Cancelada")</dd>break;
+case CalificacionRegistro n:<dt>Matrícula</dt><dd><a href="/academico/matriculas/@n.MatriculaId">@Model.Etiqueta(Model.Datos.Matriculas.Single(m=>m.Id==n.MatriculaId))</a></dd><dt>Nota</dt><dd>@n.Nota.ToString("F2")</dd><dt>Resultado</dt><dd>@(n.Nota>=6?"Aprobado":"Reprobado")</dd>break;}
+</dl></section>
+@if(Model.Modulo is "estudiantes" or "cursos"){
+var matriculas=Model.Datos.Matriculas.Where(m=>Model.Modulo=="estudiantes"?m.EstudianteId==f.Id:m.CursoId==f.Id);
+<section class="panel"><h2>Matrículas relacionadas</h2><ul class="relacionados">@foreach(var m in matriculas){<li><a href="/academico/matriculas/@m.Id">@Model.Etiqueta(m)</a> · @(m.Activa?"Activa":"Cancelada")</li>}</ul>@if(!matriculas.Any()){<p class="suave">No tiene matrículas registradas.</p>}</section>}

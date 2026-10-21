@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk.Web"><ItemGroup>
+<ProjectReference Include="../ControlAcademico.Negocio/ControlAcademico.Negocio.csproj" />
+<ProjectReference Include="../ControlAcademico.Datos/ControlAcademico.Datos.csproj" />
+</ItemGroup></Project>

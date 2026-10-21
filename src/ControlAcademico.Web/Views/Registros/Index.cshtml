@@ -1,0 +1,10 @@
+@model PaginaAcademica
+@{ViewData["Title"]=Model.Titulo;}
+<div class="encabezado"><div><p class="ceja">REGISTROS ACADÉMICOS</p><h1>@Model.Titulo</h1><p class="suave">Consulte y administre la información registrada.</p></div><a class="boton primario" href="/academico/@Model.Modulo/nuevo">+ Agregar registro</a></div>
+<section class="panel"><form method="get" class="buscador"><label for="q">Buscar en @Model.Titulo.ToLower()</label><div><input id="q" name="q" value="@Model.Buscar" placeholder="Código o nombre"><button class="boton" type="submit">Buscar</button><a class="boton secundario" href="/academico/@Model.Modulo">Limpiar</a></div></form>
+<div class="tabla"><table><thead><tr><th>Registro</th><th>Información</th><th>Acciones</th></tr></thead><tbody>
+@foreach(var r in Model.Filas){<tr><td><strong>@Model.Etiqueta(r)</strong></td><td>
+@switch(r){case EstudianteRegistro e:<span>@e.Carrera</span><small>@e.Email</small>break;case DocenteRegistro e:<span>@e.Especialidad</span><small>@e.Email</small>break;case CursoRegistro c:<span>@Model.Datos.Matriculas.Count(m=>m.CursoId==c.Id && m.Activa) / @c.CupoMaximo inscritos</span>break;case MatriculaRegistro m:<span class="insignia @(m.Activa?"verde":"gris")">@(m.Activa?"Activa":"Cancelada")</span>break;case CalificacionRegistro n:<span class="insignia @(n.Nota>=6?"verde":"roja")">@(n.Nota>=6?"Aprobado":"Reprobado")</span>break;}
+</td><td><div class="acciones"><a href="/academico/@Model.Modulo/@r.Id">Detalle</a><a href="/academico/@Model.Modulo/@r.Id/editar">Editar</a><a class="peligro" href="/academico/@Model.Modulo/@r.Id/eliminar">Eliminar</a></div></td></tr>}
+@if(!Model.Filas.Any()){<tr><td colspan="3">No hay registros que coincidan con la búsqueda.</td></tr>}
+</tbody></table></div><p class="suave">@Model.Filas.Count() registros encontrados.</p></section>

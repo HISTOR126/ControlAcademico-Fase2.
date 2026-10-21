@@ -1,9 +1,13 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/ControlAcademico.Negocio/ControlAcademico.Negocio.csproj" />
+    <Project Path="src/ControlAcademico.Datos/ControlAcademico.Datos.csproj" />
+    <Project Path="src/ControlAcademico.Web/ControlAcademico.Web.csproj" />
     <Project Path="src/ControlAcademico.Dominio/ControlAcademico.Dominio.csproj" />
     <Project Path="src/ControlAcademico.Consola/ControlAcademico.Consola.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ControlAcademico.Integracion/ControlAcademico.Integracion.csproj" />
     <Project Path="tests/ControlAcademico.Pruebas/ControlAcademico.Pruebas.csproj" />
   </Folder>
 </Solution>

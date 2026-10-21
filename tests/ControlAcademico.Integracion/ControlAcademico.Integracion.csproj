@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup><ItemGroup><ProjectReference Include="../../src/ControlAcademico.Negocio/ControlAcademico.Negocio.csproj"/><ProjectReference Include="../../src/ControlAcademico.Datos/ControlAcademico.Datos.csproj"/></ItemGroup></Project>
