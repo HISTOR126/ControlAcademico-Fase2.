@@ -1,8 +1,6 @@
-# Control Académico - base para Fase 2
 
-Continuación del proyecto de cátedra DSP404. Registra estudiantes, docentes, cursos,
-matrículas y calificaciones. Esta entrega corrige el prototipo de Fase 1 y separa las
-reglas del negocio de la consola para reutilizarlas al construir la aplicación web.
+
+
 
 **Estado:** dominio y consola funcionales, pruebas automatizadas y bocetos HTML.
 La aplicación ASP.NET y la base de datos todavía están pendientes. No se dispone
@@ -10,72 +8,74 @@ del enunciado específico de Fase 2: esta base no equivale a una entrega final d
 
 ## Procedencia y equipo
 
-Basado en https://github.com/marceloguerrero-debug/ControlAcademico/tree/1-main,
-recibido como ZIP el 21 de octubre de 2026. El ZIP completo recibido está en
-`referencia/ControlAcademico-Fase1-original.zip`; contiene los archivos sin modificar.
-No se importó el historial Git porque el ZIP no lo incluye. Esta copia no transfiere autoría
-ni cambia la pertenencia al equipo. El destino solicitado por el usuario es HISTOR126.
+
 
 Integrantes indicados en el README original (nombres únicos):
 
 | Integrante | Carnet |
-|---|---|
-| Marcelo Eduardo Guerrero Rodriguez | GR241968 |
-| Daniela Jazmin Torres Ramos | TR232197 |
+
 | José Miguel Sosa Ayala | SA251597 |
-| Susana Nicole Valle Méndez | VM253306 |
-| Alessandra Guadalupe González Burgos | GB253116 |
 
-El original repite a Alessandra en dos asignaciones. Se conserva ese documento en
-`docs/README-Fase1-original.md`; el equipo debe confirmar la distribución real de tareas.
-Video original: https://drive.google.com/file/d/1njLirsd0M4dwIirE8Bt67I102BxHhEUm/view
-(contenido y permisos del video no verificados).
 
-## Requisitos y ejecución
 
-- SDK de .NET 10. Esta base usa .NET 10 en lugar de .NET Framework 4.8 del prototipo original.
-- Un editor o IDE compatible con el SDK instalado. No requiere paquetes NuGet externos.
-- Abrir `ControlAcademico.slnx` o ejecutar desde la carpeta raíz:
 
-```sh
-dotnet build ControlAcademico.slnx
-dotnet run --project src/ControlAcademico.Consola
-dotnet run --project tests/ControlAcademico.Pruebas
-```
+# Sistema de Control Académico
 
-El último comando ejecuta las pruebas y devuelve código distinto de cero si alguna falla.
-Se utiliza un ejecutable de pruebas sin dependencias externas; no se ejecuta mediante `dotnet test`.
+Proyecto de cátedra de la asignatura Desarrollo de Aplicaciones con Software Propietario (DSP404), Universidad Don Bosco.
 
-Datos de muestra: estudiantes CT-0001, CT-0002 y CT-0003, curso DSP404,
-matrículas MAT-0001 y MAT-0002. Las dos matrículas iniciales tienen notas.
-Para probar el ciclo completo, use la opción 6 con MAT-0003, CT-0003 y DSP404;
-la opción 8 permite cancelarla mientras no tenga nota. Para calificarla use la opción 7
-con ID de nota 3. No se permite cancelar matrículas calificadas.
-La consola permite listar, buscar, matricular, registrar/actualizar notas y cancelar matrículas.
-Al salir, los datos nuevos se pierden: siguen almacenados en memoria como en Fase 1.
+## Descripción
 
-## Organización
+Sistema orientado al registro y control de estudiantes, docentes, cursos, matrículas y calificaciones de una institución educativa.
 
-```text
-src/ControlAcademico.Dominio/    Entidades, contratos y servicio en memoria
-src/ControlAcademico.Consola/    Menú, entradas y presentación
-tests/ControlAcademico.Pruebas/ Pruebas de reglas y regresiones
-wireframes/                    Bocetos originales y pantallas complementarias
-docs/                          Diagrama, cambios, plan web y guía GitHub
-referencia/                    ZIP original íntegro
-```
+El proyecto utiliza Programación Orientada a Objetos en C#. Actualmente cuenta con un prototipo de consola que almacena los datos en memoria y una propuesta de interfaz para la futura aplicación web.
 
-El dominio no usa `Console`: retorna datos y detalles que la consola presenta.
-Los métodos `MostrarInformacion`/`MostrarDetalle` del original se sustituyeron por
-`ObtenerDetalle`. Los constructores y setters se ajustaron para proteger las reglas.
-Los nombres de las entidades principales se conservan.
+## Diseño del proyecto
 
-## Diseño y continuidad
+El sistema se organiza en tres componentes:
 
-Abra `wireframes/index.html` en un navegador. Son propuestas visuales con datos de
-ejemplo, sin conexión a C# ni persistencia. El diagrama actualizado está en
-`docs/DIAGRAMA-CLASES.md`, que GitHub muestra con Mermaid.
+- **Dominio:** contiene las entidades y las reglas del sistema académico.
+- **Consola:** permite interactuar con el sistema mediante un menú.
+- **Pruebas:** comprueban las reglas de matrículas, cupos y calificaciones.
 
-Vea `docs/CAMBIOS.md`, `docs/PLAN-FASE2.md`, `docs/VALIDACION.md` y
-`docs/SUBIR-A-GITHUB.md`. El diagrama PNG anterior sigue dentro del ZIP original
-como referencia histórica; el documento Mermaid es el diagrama vigente.
+La carpeta `wireframes` contiene los bocetos de las pantallas y la carpeta `docs` incluye el diagrama de clases y la documentación.
+
+## Entidades principales
+
+- **Persona:** clase abstracta que reúne los datos comunes de estudiantes y docentes.
+- **Estudiante:** contiene carnet, carrera, facultad e información académica.
+- **Docente:** contiene código de empleado y especialidad.
+- **Curso:** representa una asignatura, su docente, créditos y cupo.
+- **Matrícula:** relaciona un estudiante con un curso.
+- **Calificación:** representa la nota final de una matrícula y determina su aprobación.
+
+## Programación Orientada a Objetos
+
+Se utiliza herencia entre Persona, Estudiante y Docente, encapsulamiento para proteger los datos y polimorfismo para obtener la información de cada tipo de persona.
+
+Las interfaces IRegistrable e IEvaluable definen comportamientos comunes de las entidades.
+
+## Funcionalidades actuales
+
+- Listar personas, cursos, matrículas y calificaciones.
+- Buscar estudiantes por carnet.
+- Registrar matrículas y comprobar disponibilidad de cupos.
+- Evitar matrículas duplicadas.
+- Cancelar matrículas que todavía no tienen calificación.
+- Registrar y actualizar notas entre 0 y 10.
+- Validar los datos y manejar errores durante las operaciones.
+
+## Tecnologías
+
+- C# y .NET 10.
+- Aplicación de consola.
+- Colecciones genéricas List<T>.
+- HTML y CSS para los bocetos de interfaz.
+- Git y GitHub.
+
+
+
+
+
+
+
+
