@@ -1,0 +1,1 @@
+<Project Sdk='Microsoft.NET.Sdk'><ItemGroup><ProjectReference Include='../ControlAcademico.Dominio/ControlAcademico.Dominio.csproj'/><PackageReference Include='Microsoft.EntityFrameworkCore.Sqlite' Version='10.0.12'/></ItemGroup></Project>

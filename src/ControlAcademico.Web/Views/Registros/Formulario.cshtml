@@ -1,0 +1,25 @@
+@model PaginaAcademica
+@{var f=Model.Formulario;ViewData["Title"]=(f.Id==0?"Agregar":"Editar")+" · "+Model.Titulo;}
+<a class="volver" href="/academico/@Model.Modulo">← Volver a @Model.Titulo.ToLower()</a><div class="encabezado"><div><p class="ceja">@Model.Titulo.ToUpper()</p><h1>@(f.Id==0?"Agregar registro":"Editar registro")</h1><p class="suave">Los campos marcados con * son obligatorios.</p></div></div>
+<section class="panel formulario"><form method="post" action="/academico/@Model.Modulo/guardar">
+@Html.AntiForgeryToken()<input type="hidden" name="Id" value="@f.Id"><input type="hidden" name="Version" value="@f.Version"><div asp-validation-summary="All" class="error" role="alert"></div>
+<div class="campos">
+@if(Model.Modulo!="calificaciones"){
+<label>Código / carnet *<input name="Codigo" value="@f.Codigo" required maxlength="30" autocomplete="off"></label>}
+@if(Model.Modulo is "estudiantes" or "docentes"){
+<label>Nombres *<input name="Nombre" value="@f.Nombre" required maxlength="100"></label><label>Apellidos *<input name="Apellido" value="@f.Apellido" required maxlength="100"></label><label>Correo electrónico *<input name="Email" value="@f.Email" type="email" required maxlength="150"></label><label>Teléfono *<input name="Telefono" value="@f.Telefono" required maxlength="30"></label><label>Fecha de nacimiento *<input name="FechaNacimiento" type="date" value="@f.FechaNacimiento.ToString("yyyy-MM-dd")" required max="@DateTime.Today.ToString("yyyy-MM-dd")"></label>
+}
+@if(Model.Modulo=="estudiantes"){
+<label>Carrera *<input name="Carrera" value="@f.Carrera" required maxlength="150"></label><label>Facultad *<input name="Facultad" value="@f.Facultad" required maxlength="150"></label><label>Ciclo actual *<input name="CicloActual" type="number" value="@f.CicloActual" min="1" required></label><label>CUM *<input name="CUM" type="number" value="@f.CUM.ToString(System.Globalization.CultureInfo.InvariantCulture)" min="0" max="10" step="0.01" required></label>
+}
+@if(Model.Modulo=="docentes"){<label>Especialidad *<input name="Especialidad" value="@f.Especialidad" required maxlength="150"></label>}
+@if(Model.Modulo=="cursos"){
+<label>Nombre del curso *<input name="Nombre" value="@f.Nombre" required maxlength="100"></label><label>Créditos *<input name="Creditos" type="number" value="@f.Creditos" required min="1"></label><label>Cupo máximo *<input name="CupoMaximo" type="number" value="@f.CupoMaximo" required min="1"></label><label>Docente *<select name="DocenteId" required><option value="">Seleccione un docente</option>@foreach(var d in Model.Datos.Docentes){<option value="@d.Id" selected="@(d.Id==f.DocenteId)">@d.Nombre @d.Apellido · @d.CodigoEmpleado</option>}</select></label>
+}
+@if(Model.Modulo=="matriculas"){
+<label>Estudiante *<select name="EstudianteId" required><option value="">Seleccione un estudiante</option>@foreach(var e in Model.Datos.Estudiantes){<option value="@e.Id" selected="@(e.Id==f.EstudianteId)">@e.Carnet · @e.Nombre @e.Apellido</option>}</select></label><label>Curso *<select name="CursoId" required><option value="">Seleccione un curso</option>@foreach(var c in Model.Datos.Cursos){<option value="@c.Id" selected="@(c.Id==f.CursoId)">@c.Codigo · @c.Nombre</option>}</select></label><label>Estado *<select name="Activa"><option value="true" selected="@f.Activa">Activa</option><option value="false" selected="@(!f.Activa)">Cancelada</option></select></label>
+}
+@if(Model.Modulo=="calificaciones"){
+<label>Matrícula *<select name="MatriculaId" required><option value="">Seleccione una matrícula activa</option>@foreach(var m in Model.Datos.Matriculas.Where(m=>m.Activa)){<option value="@m.Id" selected="@(m.Id==f.MatriculaId)">@Model.Etiqueta(m)</option>}</select></label><label>Nota final *<input name="Nota" type="number" value="@f.Nota.ToString(System.Globalization.CultureInfo.InvariantCulture)" required min="0" max="10" step="0.01"></label>
+}
+</div><div class="botonera"><button class="boton primario" type="submit">Guardar registro</button><a class="boton secundario" href="/academico/@Model.Modulo">Cancelar</a></div></form></section>
