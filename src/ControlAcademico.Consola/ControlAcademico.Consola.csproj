@@ -1,1 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup><ItemGroup><ProjectReference Include="../ControlAcademico.Dominio/ControlAcademico.Dominio.csproj" /></ItemGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+<OutputType>Exe</OutputType>
+
+</PropertyGroup>
+
+<ItemGroup>
+
+<ProjectReference Include="../ControlAcademico.Dominio/ControlAcademico.Dominio.csproj" />
+
+</ItemGroup>
+
+</Project>
